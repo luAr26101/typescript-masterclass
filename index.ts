@@ -228,3 +228,221 @@ type CheckScore = typeof score extends never ? {} : []; // [] - corect
 // let customAge: CustomAge = 50 - invalid - corect
 // let primitive: Primitive = new Date() - invalid - corect
 // let years: CheckScore = [] - valid - corect
+
+// Working with objects
+let person = {
+  name: "Mark",
+  age: 40,
+};
+
+let car: Object = {
+  brand: "BMW",
+  color: "red",
+};
+
+// not desired
+car = [];
+car = () => {};
+
+let newCar: { brand: string; color: string } = {
+  brand: "BMW",
+  color: "red",
+};
+
+// newCar = []; - this will throw an error now
+
+type Author = {
+  name: string;
+  age: number;
+  email: string;
+  readonly type: "human" | "ai";
+};
+
+type AwardDetails = {
+  name: string;
+  date: Date;
+};
+
+type Awards = {
+  // index signature
+  [key: string]: AwardDetails;
+};
+
+type Post = {
+  title: string;
+  content: string;
+  date: Date;
+  category?: string;
+  author: Author;
+  awards: Awards;
+};
+
+let post: Post = {
+  title: "This is a blog post",
+  content: "Content of the blog post",
+  date: new Date(),
+  category: "News",
+  author: {
+    name: "John",
+    age: 22,
+    email: "john@doe.com",
+    type: "human",
+  },
+  awards: {
+    web: {
+      name: "Web Awards",
+      date: new Date(),
+    },
+    web3: {
+      name: "Web 3",
+      date: new Date(),
+    },
+  },
+};
+
+let post2: Post = {
+  title: "This is a blog post",
+  content: "Content of the blog post",
+  date: new Date(),
+  author: {
+    name: "John",
+    age: 22,
+    email: "john@doe.com",
+    type: "ai",
+  },
+  awards: {
+    web: {
+      name: "Web Awards",
+      date: new Date(),
+    },
+    web3: {
+      name: "Web 3",
+      date: new Date(),
+    },
+  },
+};
+
+// Union type with objects
+type Dog = {
+  name: string;
+  barks: boolean;
+  wags: boolean;
+};
+
+type Cat = {
+  name: string;
+  purrs: boolean;
+};
+
+type DogAndCatUnion = Dog | Cat;
+
+let dog: DogAndCatUnion = {
+  name: "Buddy",
+  barks: true,
+  wags: true,
+};
+
+let cat: DogAndCatUnion = {
+  name: "Luna",
+  purrs: true,
+};
+
+// It has to have all of the properties of one of the types
+let hybridAnimal: DogAndCatUnion = {
+  name: "Luna",
+  purrs: true,
+  barks: true,
+};
+
+// Discriminating unions
+type NetworkLoadingState = {
+  state: "loading";
+};
+type NetworkFailedState = {
+  state: "failed";
+  code: number;
+};
+type NetworkSuccessState = {
+  state: "success";
+  response: {
+    title: string;
+    duration: number;
+    summary: string;
+  };
+};
+
+type NetworkState =
+  | NetworkLoadingState
+  | NetworkFailedState
+  | NetworkSuccessState;
+
+function logger(state: NetworkState) {
+  switch (state.state) {
+    case "loading":
+      return "Loading...";
+    case "failed":
+      return `Error ${state.code}`;
+    case "success":
+      return `Downloading ${state.response.title}`;
+  }
+}
+
+// Intersection types
+type Cat1 = {
+  name: string;
+  purrs: boolean;
+  color: string;
+};
+
+type Dog1 = {
+  name: string;
+  barks: boolean;
+  color: string;
+};
+
+type HybridAnimal1 = Dog1 & Cat1;
+
+let hybridAnimal1: HybridAnimal1 = {
+  name: "Max",
+  color: "white",
+  purrs: false,
+  barks: true,
+};
+
+// Objects practice
+
+type Caterer = {
+  name: string;
+  address: string;
+  phone: number;
+};
+
+type Seats = {
+  [key: string]: string;
+};
+
+type Airplane = {
+  model: string;
+  flightNumber: string;
+  timeOfDeparture: Date;
+  timeOfArrival: Date;
+  caterer: Caterer;
+  seats: Seats;
+};
+
+let airplane: Airplane = {
+  model: "Airbus A380",
+  flightNumber: "A2201",
+  timeOfDeparture: new Date(),
+  timeOfArrival: new Date(),
+  caterer: {
+    name: "Special Food Ltd",
+    address: "484, Some Street, New York",
+    phone: 7867856751,
+  },
+  seats: {
+    A1: "John Doe",
+    A2: "Mark Doe",
+    A3: "Sam Doe",
+  },
+};
