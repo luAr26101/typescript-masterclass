@@ -421,6 +421,10 @@ type Seats = {
   [key: string]: string;
 };
 
+let a: number[] = [1, 2, 3];
+let b: Array<string> = ["a", "b", "c"];
+let c: (string | number | boolean)[] = ["a", 1, "b", false];
+
 type Airplane = {
   model: string;
   flightNumber: string;
@@ -429,6 +433,8 @@ type Airplane = {
   caterer: Caterer;
   seats: Seats;
 };
+
+type Airplanes = Airplane[];
 
 let airplane: Airplane = {
   model: "Airbus A380",
@@ -446,3 +452,187 @@ let airplane: Airplane = {
     A3: "Sam Doe",
   },
 };
+
+// Arrays and Enums
+// Tuples - exist only inside TypeScript, is an array with fixed shape
+
+// Tuple
+let person1: [string, string, number] = ["John", "Doe", 18];
+
+type UserTuple = [string, string, number, string?];
+let userT: UserTuple = ["Mark", "Doe", 32, "mark@email.com"];
+
+type ListOfStudents = [number, boolean, ...string[]];
+
+const passingStudents: ListOfStudents = [3, true, "John", "Stella", "Mark"];
+
+type StringBooleansNumber = [string, ...boolean[], number];
+type BooleansStringNumber = [...boolean[], string, number];
+
+let stringBooleansNumber: StringBooleansNumber = ["string", true, false, 32];
+let booleansStringNumber: BooleansStringNumber = [
+  true,
+  false,
+  true,
+  "string",
+  32,
+];
+
+// Readonly arrays and tuples
+
+let numbers: readonly number[] = [1, 2, 3];
+// numbers.push(1);
+
+type ReadOnlyTuple = readonly [string, string, number];
+
+let personR: ReadOnlyTuple = ["John", "Doe", 32]; // once declared it cannot be modified
+// personR[0] = "Raul";
+
+type a = Readonly<string[]>;
+type b = ReadonlyArray<string | number>;
+
+// tuple
+type c = Readonly<[number, string, number]>;
+
+// Enums are only available in TypeScript and not in JavaScript
+// Enums are compiled in javaScript files
+const STATUS_LOADING = "loading";
+const STATUS_STOPPED = "stopped";
+
+enum Direction {
+  Up, // 0
+  Down, // 1
+  Left, // 2
+  Right, // 3
+}
+
+console.log(Direction.Up);
+// Direction.Left = 5; -> not possible
+
+enum Direction2 {
+  Up = 1, // 0
+  Down, // 2
+  Left, // 3
+  Right, // 4
+}
+console.log(Direction2.Right);
+
+enum Roles {
+  ADMIN = "admin",
+  AUTHOR = "author",
+  EDITOR = "editor",
+}
+
+type Person = {
+  name: string;
+  email: string;
+  password: string;
+  role: Roles;
+};
+
+const personE: Person = {
+  name: "John",
+  email: "john@email.com",
+  password: "123",
+  role: Roles.ADMIN,
+};
+
+console.log(personE);
+
+enum Direction3 {
+  Up = 1,
+  Down = "down",
+  Left = 3,
+}
+
+// Enums vs Objects
+
+const enum EDirection { // not compiled as an object to JavaScript, use const if you want to avoid unnecessary creation on objects in JavaScript
+  Up, // 0
+  Down, // 1
+  Left, // 2
+  Right, // 3
+}
+
+const ODirection = {
+  Up: 0,
+  Down: 1,
+  Left: 2,
+  Right: 3,
+} as const; // acts like enum
+
+let eDirection = EDirection.Up;
+let direction = Direction.Right;
+console.log(eDirection);
+
+// Computed values in enums
+enum AccessPermissions {
+  None = 0,
+  Read = 1,
+  Write = 2,
+  ReadWrite = Read + Write,
+  Delete = 4,
+  All = ReadWrite | Delete,
+}
+
+console.log("---");
+console.log(AccessPermissions.ReadWrite);
+console.log(AccessPermissions.All);
+
+// Enums as Unions and Types
+
+enum ShapeKind {
+  Circle = "circle",
+  Square = "square",
+}
+
+type Circle = {
+  kind: ShapeKind.Circle;
+  radius: number;
+};
+
+type Square = {
+  kind: ShapeKind.Square;
+  sideLength: number;
+};
+
+let circle: Circle = {
+  radius: 100,
+  kind: ShapeKind.Circle,
+};
+
+function printShape(shape: ShapeKind) {
+  console.log(shape);
+}
+
+// Enums behave like unions of properties of enums in this case (Circle | Square)
+printShape(ShapeKind.Circle);
+
+// *1. Create an array numbers that only accepts numbers and another array strings that only accepts strings.
+const onlyNumbers: number[] = [1, 2, 3];
+const onlyStrings: string[] = ["John", "Doe"];
+
+// *2. Create a tuple person that holds a string (name) and a number (age).
+
+type DataTuple = [string, number];
+let personTuple: DataTuple = ["John", 32];
+
+// *3. Create a readonly array colors that holds strings and a readonly tuple point that holds
+// * two numbers (x, y). Attempt to modify their elements and observe the TypeScript error.
+const colors: readonly string[] = ["blue", "red"];
+// colors.push("green");
+const point: readonly [number, number] = [1, 2];
+// point.push(3);
+
+// *4. Create an enum called StatusEnum that holds 3 properties Active, Inactive, Pending
+enum StatusEnum {
+  Active,
+  Inactive,
+  Pending,
+}
+// *5. Create an object as const called Status with the same structure as an StatusEnum
+const Status = {
+  Active: 0,
+  Inactive: 1,
+  Pending: 2,
+} as const; // behaves like a a enum
