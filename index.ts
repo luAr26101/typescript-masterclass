@@ -636,3 +636,279 @@ const Status = {
   Inactive: 1,
   Pending: 2,
 } as const; // behaves like a a enum
+
+// Functions in TypeScript
+
+// named function
+function intro(name: string, age: number, country?: string): string {
+  if (country) {
+    return `My name is ${name} and I'm ${age} years old. I live in ${country}`;
+  }
+  return `My name is ${name} and I'm ${age} years old`;
+}
+//! intro("John");
+
+// function expression
+const intro2 = function (name: string, age: number): string {
+  return `My name is ${name} and I'm ${age} years old`;
+};
+
+// arrow function
+const intro3 = (name: string, age: number): string =>
+  `My name is ${name} and I'm ${age} years old`;
+
+// Default and optional parameters
+function intro4(name: string, age: number, country?: string): string {
+  if (country) {
+    return `My name is ${name} and I'm ${age} years old. I live in ${country}`;
+  }
+  return `My name is ${name} and I'm ${age} years old`;
+}
+intro4("John", 20);
+intro4("Mark", 20, "USA");
+
+// Custom parameters and return types
+enum AgeUnit {
+  Years = "years",
+  Months = "months",
+}
+
+// type GreetingFunction = (greeting: string) => string;
+
+type PersonF = {
+  name: string;
+  age: number;
+  ageUnit: AgeUnit;
+  // Function call signatures
+  greet: (greeting: string) => string;
+};
+
+const personF: PersonF = {
+  name: "Scott",
+  age: 30,
+  ageUnit: AgeUnit.Years,
+  greet: (greeting) => {
+    return `${greeting} ${personF.name}`;
+  },
+};
+
+function convertAgeToMonths(person: PersonF): PersonF {
+  if (person.ageUnit === AgeUnit.Years) {
+    person.age = person.age * 12;
+    person.ageUnit = AgeUnit.Months;
+  }
+
+  return person;
+}
+
+console.log(convertAgeToMonths(personF));
+console.log(personF.greet("Hello"));
+
+// Anonymous Functions
+const students: string[] = ["Alice", "Bob", "Mark"];
+
+// When using anonymous function with TypeScript,
+// it will be able to infer each of this parameters in the anonymous function
+students.map((student) => {
+  console.log(student);
+});
+
+students.map(function (student) {
+  console.log(student);
+});
+
+// Void OR Never
+type WriteToDBFunction = (value: string) => void;
+
+const writeToDatabase: WriteToDBFunction = function (value) {
+  console.log(`Writing to a database`, value);
+};
+
+function throwError1(error: string): never {
+  throw new Error(error);
+}
+
+type check1 = never extends void ? true : false;
+type check7 = void extends never ? true : false;
+
+// Async functions
+async function fetchFromDatabase(id: number): Promise<any> {}
+
+const anotherAsyncFunction = async (): Promise<any> => {};
+
+async function returnString(id: number): Promise<string> {
+  return Promise.resolve("string");
+}
+
+type UserF = {
+  name: string;
+  age: number;
+};
+
+async function returnUser(id: number): Promise<UserF> {
+  return Promise.resolve({ name: "John", age: 20 });
+}
+
+// Rest parameters and arguments
+function multiplyBy(by: number, ...numbers: number[]) {
+  return numbers.map((number) => number * by);
+}
+
+console.log(multiplyBy(2, 3, 4, 5, 6, 7));
+
+const args = [8, 5] as const;
+const angle = Math.atan2(...args);
+const angle1 = Math.atan2(...args);
+
+type Numbers = {
+  a: number;
+  b: number;
+  c: number;
+};
+
+let numbers1: Numbers = {
+  a: 2,
+  b: 3,
+  c: 4,
+};
+
+// Parameter destructuring
+function sum({ a, b, c }: Numbers) {
+  return a + b + c;
+}
+
+console.log(sum(numbers1));
+
+type FetchDataFunction = (
+  url: string,
+  ...params: string[]
+) => Promise<string[]>;
+
+const fetchData: FetchDataFunction = async (url, ...queryParams) => {
+  const params = queryParams.join("&");
+  const theUrl = `${url}?${params}`;
+  console.log(theUrl);
+  const response = await fetch(theUrl);
+  const data = await response.json();
+  return queryParams.map((_, index) => `data${index + 1}`);
+};
+
+const post1 = await fetchData(
+  "https://jsonplaceholder.typicode.com/posts",
+  "userId=1"
+);
+
+// const exampleData = await fetchData(
+//   "https://api.example.com",
+//   "param1=value1",
+//   "param2=value2"
+// );
+
+console.log(post1);
+
+// Function overloading
+const str = "Hello, world";
+const part1 = str.slice(7);
+const part2 = str.slice(7, 10);
+console.log("---");
+console.log(part1);
+console.log(part2);
+
+// Dynamic function = a function which can be invoked with multiple
+// arguments and depending on how many arguments you are passing to the function
+// the resut output of that function will be different.
+// This is where we use function overloading in TypeScript
+
+type Reservation = {
+  departureDate: Date;
+  returnDate?: Date;
+  departingFrom: string;
+  destination: string;
+};
+
+type Reserve = {
+  (
+    departureDate: Date,
+    returnDate: Date,
+    departingFrom: string,
+    destination: string
+  ): Reservation | never;
+  (departureDate: Date, departingFrom: string, destination: string):
+    | Reservation
+    | never;
+};
+
+const reserve: Reserve = (
+  departureDate,
+  returnDateOrDepartingFrom,
+  departingFromOrDestination,
+  destination?: string
+) => {
+  if (returnDateOrDepartingFrom instanceof Date && destination) {
+    return {
+      departureDate: departureDate,
+      returnDate: returnDateOrDepartingFrom,
+      departingFrom: departingFromOrDestination,
+      destination: destination,
+    };
+  } else if (typeof returnDateOrDepartingFrom === "string") {
+    return {
+      departureDate: departureDate,
+      departingFrom: returnDateOrDepartingFrom,
+      destination: departingFromOrDestination,
+    };
+  }
+
+  throw new Error("Please provide valid details to reserve a ticket.");
+};
+
+console.log("--- Reservations ---");
+
+console.log(reserve(new Date(), new Date(), "New York", "Washington"));
+console.log(reserve(new Date(), "New York", "Washington"));
+
+/**
+ * Practice Excercise for functions
+ */
+
+//* 1. Declare a function named greet that takes a string parameter name and returns a greeting message.
+
+function greet(name: string): string {
+  return `Hello, ${name}`;
+}
+
+//* 2. Define an type Product with properties id (number) and name (string). Create a function named getProduct that takes an id parameter and returns a Product.
+
+type Product = {
+  id: number;
+  name: string;
+};
+
+function getProduct(id: number): Product {
+  return {
+    id,
+    name: `Product with id: ${id}`,
+  };
+}
+
+//* 3. Declare a function signature named Calculator as a type that takes two numbers and returns a number. Implement two functions add and subtract that match this signature.
+
+type Calculator = (a: number, b: number) => number;
+
+const add: Calculator = function (a, b) {
+  return a + b;
+};
+
+const subtract: Calculator = function (a, b) {
+  return a - b;
+};
+
+//* 4. Create a function named logMessage that takes a string message and logs it to the console, returning void. Also, create a function named throwError that takes a string message and throws an error, returning never.
+
+function logMessage(message: string): void {
+  console.log(message);
+}
+
+function throwErrorF(errorMessage: string): never {
+  throw new Error(errorMessage);
+}
