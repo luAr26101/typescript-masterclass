@@ -370,7 +370,7 @@ newUser.displayInfo();
 
 class Employee {
   private _salary?: number;
-  public static companyName: string;
+  public static companyName: string = "Tech Solutions Inc";
   constructor(public name: string, public age: number, protected id: number) {}
 
   set salary(amount: number) {
@@ -387,7 +387,7 @@ class Employee {
     return this._salary;
   }
 
-  static getCompanyName() {
+  public static getCompanyName() {
     return Employee.companyName;
   }
 
@@ -408,17 +408,19 @@ class Manager extends Employee {
   }
 
   getDetails() {
-    console.log(`Name: ${this.name}`);
-    console.log(`Age: ${this.age}`);
+    console.log("From Manager Class");
+    // invoke getDetails method of the parent class
+    super.getDetails();
     console.log(`Department: ${this.department}`);
   }
 }
 
 console.log(`--- Practice ---`);
-const raul = new Employee("Raul", 40, 1);
+const raul: Employee = new Employee("Raul", 40, 1);
 raul.salary = 3800;
 console.log(raul.salary);
 const vasile = new Manager("Vasile", 42, 2, "Sales");
 vasile.salary = 4200;
 raul.getDetails();
 vasile.getDetails();
+console.log(Employee.getCompanyName());

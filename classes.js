@@ -288,7 +288,7 @@ class Employee {
     age;
     id;
     _salary;
-    static companyName;
+    static companyName = "Tech Solutions Inc";
     constructor(name, age, id) {
         this.name = name;
         this.age = age;
@@ -327,8 +327,9 @@ class Manager extends Employee {
         this.department = department;
     }
     getDetails() {
-        console.log(`Name: ${this.name}`);
-        console.log(`Age: ${this.age}`);
+        console.log("From Manager Class");
+        // invoke getDetails method of the parent class
+        super.getDetails();
         console.log(`Department: ${this.department}`);
     }
 }
@@ -340,5 +341,6 @@ const vasile = new Manager("Vasile", 42, 2, "Sales");
 vasile.salary = 4200;
 raul.getDetails();
 vasile.getDetails();
+console.log(Employee.getCompanyName());
 export {};
 //# sourceMappingURL=classes.js.map
