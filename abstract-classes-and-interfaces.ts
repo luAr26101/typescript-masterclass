@@ -95,5 +95,5 @@ adminDep.addHolidays(adminHolidays);
 // console.log(itDep);
 // console.log(adminDep);
 itDep.printHolidays();
-console.log("--------------");
+console.log("-------------");
 adminDep.printHolidays();
