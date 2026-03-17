@@ -81,5 +81,129 @@ const rob = {
 // console.log(iUser);
 // console.log(iUserWithAddress);
 console.log(rob);
+var AutomobileTypes;
+(function (AutomobileTypes) {
+    AutomobileTypes["car"] = "car";
+    AutomobileTypes["bus"] = "bus";
+    AutomobileTypes["van"] = "van";
+    AutomobileTypes["truck"] = "truck";
+    AutomobileTypes["bike"] = "bike";
+})(AutomobileTypes || (AutomobileTypes = {}));
+var AutomobileBrands;
+(function (AutomobileBrands) {
+    AutomobileBrands["ferrari"] = "ferrari";
+    AutomobileBrands["honda"] = "honda";
+    AutomobileBrands["bmw"] = "bmw";
+    AutomobileBrands["toyota"] = "toyota";
+})(AutomobileBrands || (AutomobileBrands = {}));
+var AutomobileColors;
+(function (AutomobileColors) {
+    AutomobileColors["red"] = "red";
+    AutomobileColors["blue"] = "blue";
+    AutomobileColors["white"] = "white";
+    AutomobileColors["black"] = "black";
+    AutomobileColors["silver"] = "silver";
+})(AutomobileColors || (AutomobileColors = {}));
+// const ferrari: Automobile<AutomobileTypes, AutomobileBrands, AutomobileColors> =
+//   {
+//     type: AutomobileTypes.car,
+//     brand: AutomobileBrands.ferrari,
+//     colors: [AutomobileColors.black, AutomobileColors.red],
+//     description: "This is a Ferrari",
+//   };
+// const honda: Automobile<string, string, string> = {
+//   type: "car",
+//   brand: "Honda",
+//   colors: ["silver", "black"],
+//   description: "This is a honda",
+// };
+// const toyota: Automobile<string, AutomobileBrands, number> = {
+//   type: "car",
+//   brand: AutomobileBrands.toyota,
+//   colors: [234, 235],
+//   description: "This is a Toyota",
+// };
+// console.log(honda);
+// console.log(toyota);
+// console.log(ferrari);
+// class Car implements Automobile<string, AutomobileBrands, AutomobileColors> {
+//   public type: string = "car";
+//   constructor(
+//     public brand: AutomobileBrands,
+//     public colors: AutomobileColors[],
+//     public description: string
+//   ) {}
+// }
+class Truck {
+    brand;
+    colors;
+    description;
+    capacity;
+    licenseRenewalDate;
+    driverName;
+    type = "truck";
+    constructor(brand, colors, description, capacity, licenseRenewalDate, driverName = "John") {
+        this.brand = brand;
+        this.colors = colors;
+        this.description = description;
+        this.capacity = capacity;
+        this.licenseRenewalDate = licenseRenewalDate;
+        this.driverName = driverName;
+    }
+}
+// const ferrari: Car = new Car(
+//   AutomobileBrands.ferrari,
+//   [AutomobileColors.black, AutomobileColors.red],
+//   "This is a Ferrari"
+// );
+const toyotaTruck = new Truck(AutomobileBrands.toyota, [AutomobileColors.black, AutomobileColors.silver], "This is a Toyota truck", "10T", new Date());
+// console.log(ferrari);
+console.log(toyotaTruck);
+class UserI {
+    name;
+    constructor(name) {
+        this.name = name;
+    }
+}
+class Password {
+    password;
+    constructor(password) {
+        this.password = password;
+    }
+}
+class RegisteredUser extends UserI {
+}
+class DMUser {
+    id;
+    name;
+    passwordHash;
+    constructor(id, name, passwordHash) {
+        this.id = id;
+        this.name = name;
+        this.passwordHash = passwordHash;
+    }
+}
+// Intersection type
+const UserAndAdmin = {
+    name: "John",
+    isAdmin: false,
+};
+console.log(UserAndAdmin);
+// Union type
+const UserOrAdmin = {
+    isAdmin: false,
+};
+// interface IPerson extends Name, LastName {}
+class CPerson {
+    name;
+    lastName;
+    constructor(name, lastName) {
+        this.name = name;
+        this.lastName = lastName;
+    }
+}
+const raul = new CPerson("Raul", "S");
+console.log(raul);
 export {};
+// If you need to have certain implementations within your parent class (e.g. greeting method or static method) you are better of using Abstract classes
 //# sourceMappingURL=interfaces.js.map
